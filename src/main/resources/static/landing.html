@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>To Do App - Welcome</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* teal gradient */
+      color: #f9fafb; /* near white */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #e0f2f1; /* lighter teal-ish */
+      text-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      user-select: none;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 3rem;
+      font-weight: 600;
+      color: #d1fae5; /* pale mint */
+      text-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      user-select: none;
+    }
+
+    button {
+      background-color: #059669; /* teal-700 */
+      border: none;
+      padding: 1rem 3rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f9fafb; /* almost white */
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(5, 150, 105, 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #10b981; /* teal-500 */
+      box-shadow: 0 12px 20px rgba(16, 185, 129, 0.6);
+      transform: translateY(-2px);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 10px rgba(16, 185, 129, 0.5);
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 3rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+      }
+
+      button {
+        padding: 0.8rem 2.5rem;
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+
+</head>
+<body>
+<h1>TO DO App</h1>
+<p>Your simple and efficient task manager</p>
+<button onclick="goToApp()">Get Started</button>
+
+<script>
+  function goToApp() {
+    window.location.href = 'index.html';
+  }
+</script>
+</body>
+</html>

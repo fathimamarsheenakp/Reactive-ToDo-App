@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Completed Tasks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f2f2f2;
+    }
+
+    h2 {
+      text-align: center;
+      color: #2d6a4f;
+    }
+
+    .task {
+      background: #e9f5e9;
+      border-left: 6px solid #2d6a4f;
+      padding: 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+    }
+
+    .task h3 {
+      margin: 0 0 6px 0;
+      color: #1b4332;
+    }
+
+    .task p {
+      margin: 0 0 6px 0;
+    }
+
+    .task small {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<h2>✅ Completed Tasks</h2>
+<div id="completedTasks"></div>
+
+<script>
+  fetch('/todo/completed')
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to fetch completed tasks');
+      return res.json();
+    })
+    .then(tasks => {
+      const container = document.getElementById('completedTasks');
+      if (tasks.length === 0) {
+        container.innerHTML = "<p>No completed tasks.</p>";
+        return;
+      }
+
+      tasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = 'task';
+        div.innerHTML = `
+          <h3>${task.name}</h3>
+          <p>${task.description}</p>
+          <small>Created At: ${new Date(task.createdAt).toLocaleString()}</small>
+        `;
+        container.appendChild(div);
+      });
+    })
+    .catch(error => {
+      console.error(error);
+      document.getElementById('completedTasks').innerHTML = "<p>Error loading tasks.</p>";
+    });
+</script>
+
+</body>
+</html>
