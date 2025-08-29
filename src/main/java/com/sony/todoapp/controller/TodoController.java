@@ -42,7 +42,7 @@ public class TodoController {
         return todoService.searchTasks(name);
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/edit/{id  }")
     public Mono<ResponseEntity<TodoResponseDto>> updateTask(@PathVariable String id, @Valid @RequestBody TodoRequestDto dto) {
         return todoService.updateTask(id, dto)
                 .map(ResponseEntity::ok)
