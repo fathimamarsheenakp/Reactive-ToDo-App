@@ -21,4 +21,5 @@ public class Todo {
     private String description;
     private boolean completed;
     private LocalDateTime createdAt = LocalDateTime.now();
+    private String userId;
 }

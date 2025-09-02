@@ -16,6 +16,7 @@ public class TodoMapper {
         Todo todo = new Todo();
         todo.setName(dto.getName());
         todo.setDescription(dto.getDescription());
+        todo.setUserId(dto.getUserId());
 
         return todo;
     }
@@ -31,6 +32,7 @@ public class TodoMapper {
         responseDto.setDescription(entity.getDescription());
         responseDto.setCompleted(entity.isCompleted());
         responseDto.setCreatedAt(entity.getCreatedAt());
+        responseDto.setUserId(entity.getUserId());
         return responseDto;
     }
 }

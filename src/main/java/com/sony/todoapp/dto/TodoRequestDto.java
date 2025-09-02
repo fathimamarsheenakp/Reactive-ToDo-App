@@ -13,4 +13,6 @@ public class TodoRequestDto {
 
     @Size(max = 500, message = "Description must be at most 500 characters")
     private String description;
+
+    private String userId;
 }
