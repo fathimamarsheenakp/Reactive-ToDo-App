@@ -3,6 +3,8 @@ package com.sony.todoapp.service;
 import com.sony.todoapp.dto.TodoRequestDto;
 import com.sony.todoapp.dto.TodoResponseDto;
 import com.sony.todoapp.entity.Todo;
+import com.sony.todoapp.exception.ResourceNotFoundException;
+import com.sony.todoapp.exception.TaskAlreadyCompletedException;
 import com.sony.todoapp.mapper.TodoMapper;
 import com.sony.todoapp.repository.TodoRepository;
 import com.sony.todoapp.repository.UserRepository;
@@ -58,10 +60,10 @@ public class TodoService {
     //    Update tasks
     public Mono<TodoResponseDto> updateTask(String id, TodoRequestDto dto, String userId) {
         return repository.findByIdAndUserId(id, userId)
-                .switchIfEmpty(Mono.error(new RuntimeException("Task not found or not yours")))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("Task not found")))
                 .flatMap(existing -> {
                     if (existing.isCompleted()) {
-                        return Mono.error(new IllegalStateException("Cannot update a completed task"));
+                        return Mono.error(new TaskAlreadyCompletedException("Cannot update a completed task"));
                     }
                     existing.setName(dto.getName());
                     existing.setDescription(dto.getDescription());
@@ -73,7 +75,7 @@ public class TodoService {
     //    Mark task as completed
         public Mono<TodoResponseDto> markCompleted(String id, String userId) {
             return repository.findByIdAndUserId(id, userId)
-                    .switchIfEmpty(Mono.error(new RuntimeException("Task not found or not yours")))
+                    .switchIfEmpty(Mono.error(new ResourceNotFoundException("Task not found or not yours")))
                     .flatMap(todo -> {
                         todo.setCompleted(true);
                         return repository.save(todo);
@@ -85,7 +87,7 @@ public class TodoService {
         //    Delete a task
         public Mono<Void> deleteTask(String id, String userId) {
             return repository.findByIdAndUserId(id, userId)
-                    .switchIfEmpty(Mono.error(new RuntimeException("Task not found or not yours")))
+                    .switchIfEmpty(Mono.error(new ResourceNotFoundException("Task not found or not yours")))
                     .flatMap(repository::delete);
         }
 

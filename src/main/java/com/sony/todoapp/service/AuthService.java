@@ -3,6 +3,8 @@ package com.sony.todoapp.service;
 import com.sony.todoapp.dto.UserRequestDto;
 import com.sony.todoapp.dto.UserResponseDto;
 import com.sony.todoapp.entity.User;
+import com.sony.todoapp.exception.InvalidCredentialsException;
+import com.sony.todoapp.exception.UserAlreadyExistsException;
 import com.sony.todoapp.mapper.UserMapper;
 import com.sony.todoapp.repository.UserRepository;
 import com.sony.todoapp.util.JwtUtil;
@@ -22,7 +24,7 @@ public class AuthService {
     public Mono<UserResponseDto> register(UserRequestDto dto) {
         return userRepository.findByUsername(dto.getUsername())
                 // If username exists, error
-                .flatMap(existing -> Mono.<UserResponseDto>error(new RuntimeException("Username already exists")))
+                .flatMap(existing -> Mono.<UserResponseDto>error(new UserAlreadyExistsException("Username already exists")))
                 // If username does not exist, save new user
                 .switchIfEmpty(
                         Mono.defer(() -> {
@@ -46,13 +48,13 @@ public class AuthService {
     // Login existing user
     public Mono<UserResponseDto> login(UserRequestDto dto) {
         return userRepository.findByUsername(dto.getUsername())
-                .switchIfEmpty(Mono.error(new RuntimeException("Invalid username or password")))
+                .switchIfEmpty(Mono.error(new InvalidCredentialsException("Invalid username or password")))
                 .flatMap(user -> {
                     if (bCryptPasswordEncoder.matches(dto.getPassword(), user.getPassword())) {
                         String token = JwtUtil.generateToken(user.getId());
                         return Mono.just(UserMapper.toDto(user, token));
                     } else {
-                        return Mono.error(new RuntimeException("Invalid username or password"));
+                        return Mono.error(new InvalidCredentialsException("Invalid username or password"));
                     }
                 });
     }

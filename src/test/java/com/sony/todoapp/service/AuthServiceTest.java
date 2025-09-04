@@ -2,6 +2,7 @@ package com.sony.todoapp.service;
 
 import com.sony.todoapp.dto.UserRequestDto;
 import com.sony.todoapp.entity.User;
+import com.sony.todoapp.exception.UserAlreadyExistsException;
 import com.sony.todoapp.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,7 @@ public class AuthServiceTest {
 
         StepVerifier.create(authService.register(requestDto))
                 .expectErrorMatches(e ->
-                        e instanceof RuntimeException &&
+                        e instanceof UserAlreadyExistsException &&
                                 e.getMessage().equals("Username already exists")
                 )
                 .verify();
@@ -92,7 +93,7 @@ public class AuthServiceTest {
 
         StepVerifier.create(authService.login(requestDto))
                 .expectErrorMatches(throwable ->
-                        throwable instanceof RuntimeException &&
+                        throwable instanceof UserAlreadyExistsException &&
                                 throwable.getMessage().equals("Invalid username or password")
                 )
                 .verify();
@@ -105,7 +106,7 @@ public class AuthServiceTest {
 
         StepVerifier.create(authService.login(requestDto))
                 .expectErrorMatches(throwable ->
-                        throwable instanceof RuntimeException &&
+                        throwable instanceof UserAlreadyExistsException &&
                                 throwable.getMessage().equals("Invalid username or password")
                 )
                 .verify();
