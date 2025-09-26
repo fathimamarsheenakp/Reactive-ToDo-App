@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,12 +41,29 @@ public class TodoController {
         return todoService.getAllTasks(user.getId());
     }
 
-    // Search tasks by name (e.g. /todo/search?name=read)
+//    // Search tasks by name (e.g. /todo/search?name=read)
+//    @GetMapping("/search")
+//    public Flux<TodoResponseDto> searchTask(@RequestParam String name,
+//                                            @AuthenticationPrincipal User user) {
+//        return todoService.searchTasks(name, user.getId());
+//    }
+
     @GetMapping("/search")
-    public Flux<TodoResponseDto> searchTask(@RequestParam String name,
+    public Mono<ResponseEntity<List<TodoResponseDto>>> searchTask(@RequestParam String keyword,
                                             @AuthenticationPrincipal User user) {
-        return todoService.searchTasks(name, user.getId());
+        return todoService.searchTasks(keyword, user.getId())
+                .collectList()
+                .map(ResponseEntity::ok)
+                .onErrorResume(e -> Mono.just(
+                        ResponseEntity.status(500).body(Collections.emptyList())
+                ));
     }
+
+//    @GetMapping("/search/solr")
+//    public Flux<TodoResponseDto> searchTasksSolr(@RequestParam String keyword,
+//                                                 @AuthenticationPrincipal User user) {
+//        return todoService.searchTasksSolr(keyword, user.getId());
+//    }
 
     @PutMapping("/edit/{id}")
     public Mono<ResponseEntity<TodoResponseDto>> updateTask(@PathVariable String id,
@@ -77,10 +93,10 @@ public class TodoController {
         return todoService.deleteTask(id, user.getId());
     }
 
-//    Get completed tasks
+    // Get completed tasks
     @GetMapping("/completed")
     public Mono<ResponseEntity<List<TodoResponseDto>>> getCompletedTasks(@AuthenticationPrincipal User user) {
-        return todoService.getCompletedTasks(user.getId())
+        return todoService.getCompletedTasksEs(user.getId())
                 .collectList()
                 .map(ResponseEntity::ok)
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -91,7 +107,7 @@ public class TodoController {
     //    Get pending tasks
     @GetMapping("/pending")
     public Mono<ResponseEntity<List<TodoResponseDto>>> getPendingTasks(@AuthenticationPrincipal User user) {
-        return todoService.getPendingTasks(user.getId())
+        return todoService.getPendingTasksEs(user.getId())
                 .collectList()
                 .map(ResponseEntity::ok)
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

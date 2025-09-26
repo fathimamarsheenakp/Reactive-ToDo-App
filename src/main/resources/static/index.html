@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>To Do App</title>
     <style>
-        /* --- Basic Reset & Styling --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; height: 100vh; background: #e9ecef; color: #333; display: flex; }
 
-        /* Sidebar (hidden by default) */
         .sidebar {
             display: none;
             width: 250px;
@@ -19,14 +17,7 @@
             flex-direction: column;
             user-select: none;
         }
-        .sidebar h2 {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 45px;
-            text-align: center;
-            color: #10b981;
-            text-transform: uppercase;
-        }
+        .sidebar h2 { font-size: 28px; font-weight: 800; margin-bottom: 45px; text-align: center; color: #10b981; text-transform: uppercase; }
         .sidebar ul { list-style: none; flex-grow: 1; }
         .sidebar li {
             padding: 15px 18px;
@@ -40,18 +31,15 @@
         .sidebar li:hover { background-color: #10b981; color: #fff; transform: translateX(6px); }
         .sidebar li.active { background-color: #059669; color: #fff; transform: translateX(6px); }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             padding: 40px;
             background: white;
             overflow-y: auto;
             border-radius: 0 10px 10px 0;
-            display: block; /* changed from flex */
+            display: block;
         }
 
-
-        /* Centered Login/Register Container */
         .auth-container {
             background: white;
             padding: 40px 30px;
@@ -61,20 +49,10 @@
             max-width: 400px;
         }
 
-        .auth-container h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 25px;
-            color: #10b981;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
+        .auth-container h2 { font-size: 28px; font-weight: 700; margin-bottom: 25px; color: #10b981; text-align: center; text-transform: uppercase; }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; }
-        input[type="text"], input[type="password"], textarea {
-            width: 100%; padding: 10px; font-size: 16px; border: 1.5px solid #ccc; border-radius: 6px;
-        }
+        input[type="text"], input[type="password"], textarea { width: 100%; padding: 10px; font-size: 16px; border: 1.5px solid #ccc; border-radius: 6px; }
         input:focus, textarea:focus { outline: none; border-color: #1abc9c; }
 
         button.addtask {
@@ -91,7 +69,6 @@
         }
         button.addtask:hover { background-color: #16a085; }
 
-        /* Task List */
         ul { list-style: none; padding-left: 0; }
         .task-item {
             background: #f7f9fa;
@@ -104,7 +81,6 @@
         .status-completed { color: green; font-weight: 600; margin-left: 8px; }
         .status-pending { color: red; font-weight: 600; margin-left: 8px; }
 
-        /* Responsive */
         @media (max-width: 720px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; flex-direction: row; justify-content: space-around; padding: 15px; border-radius: 0 0 10px 10px; }
@@ -261,24 +237,24 @@
             .catch(err=>alert("Error: "+err.message));
         }
 
-        function showAllTasks() {
-            document.getElementById('content').innerHTML = `
-                <h2>All Tasks</h2>
-                <div style="margin-bottom:15px;">
-                    <input type="text" id="searchInput" placeholder="Search..." />
-                    <button class="addtask" onclick="searchTasks()">Search</button>
-                </div>
-                <div id="taskList"></div>
-            `;
-            fetch("/todo", { headers: getAuthHeaders() })
-            .then(res=>res.ok?res.json():res.text().then(t=>{throw new Error(t)}))
-            .then(tasks=>renderTasks(tasks))
-            .catch(err=>alert("Error: "+err.message));
-        }
+<!--        function showAllTasks() {-->
+<!--            document.getElementById('content').innerHTML = `-->
+<!--                <h2>All Tasks</h2>-->
+<!--                <div style="margin-bottom:15px;">-->
+<!--                    <input type="text" id="searchInput" placeholder="Search..." />-->
+<!--                    <button class="addtask" onclick="searchTasks()">Search</button>-->
+<!--                </div>-->
+<!--                <div id="taskList"></div>-->
+<!--            `;-->
+<!--            fetch("/todo", { headers: getAuthHeaders() })-->
+<!--            .then(res=>res.ok?res.json():res.text().then(t=>{throw new Error(t)}))-->
+<!--            .then(tasks=>renderTasks(tasks))-->
+<!--            .catch(err=>alert("Error: "+err.message));-->
+<!--        }-->
 
         function searchTasks() {
             const query = document.getElementById('searchInput').value.trim();
-            fetch(`/todo/search?name=${encodeURIComponent(query)}`, { headers: getAuthHeaders() })
+            fetch(`/todo/search?keyword=${encodeURIComponent(query)}`, { headers: getAuthHeaders() })
             .then(res=>res.ok?res.json():res.text().then(t=>{throw new Error(t)}))
             .then(tasks=>renderTasks(tasks))
             .catch(err=>alert("Error: "+err.message));
